@@ -1,4 +1,4 @@
-angular.module('car', ['restangular', 'ngRoute']).
+angular.module('car', ['restangular', 'ngRoute', 'appStorage']).
   config(function($routeProvider, RestangularProvider) {
     $routeProvider.
       when('/', {
@@ -32,9 +32,27 @@ angular.module('car', ['restangular', 'ngRoute']).
         }
         return elem;
       })
+      
+        var demo = angular.module('demo', [ 'appStorage' ]);
+
+
+
+
   });
+  
 
 
+    function AppStorageCtrl($scope, appStorage) {
+      appStorage('MyAppStorage', 'myAppStorage', $scope);
+    }
+
+    function AppStorageCtrl2($scope, appStorage) {
+      appStorage('MyAppStorage', 'myAppStorage', $scope);
+      $scope.myAppStorage.options = $scope.myAppStorage.options || [];
+    }
+  
+  
+  
 function ListCtrl($scope, Restangular) {
    $scope.cars = Restangular.all("cars").getList().$object;
 }
@@ -69,3 +87,4 @@ function EditCtrl($scope, $location, Restangular, car) {
     });
   };
 }
+
