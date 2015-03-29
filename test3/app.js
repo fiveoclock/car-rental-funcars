@@ -5,11 +5,12 @@ angular.module('car', ['restangular', 'ngRoute']).
         controller:ListCtrl, 
         templateUrl:'list.html'
       }).
-      when('/edit/:carId', {
+      when('/book/:carId', {
         controller:EditCtrl, 
-        templateUrl:'detail.html',
+        templateUrl:'book.html',
         resolve: {
           car: function(Restangular, $route){
+              console.log($route.current.params.carId);
             return Restangular.one('cars', $route.current.params.carId).get();
           }
         }
@@ -17,10 +18,10 @@ angular.module('car', ['restangular', 'ngRoute']).
       when('/new', {controller:CreateCtrl, templateUrl:'detail.html'}).
       otherwise({redirectTo:'/'});
       
-      RestangularProvider.setBaseUrl('/api/myapp/cars');
-      RestangularProvider.setDefaultRequestParams({ apiKey: '4f847ad3e4b08a2eed5f3b54' })
+      RestangularProvider.setBaseUrl('/api/myapp/');
+      //RestangularProvider.setDefaultRequestParams({ apiKey: '4f847ad3e4b08a2eed5f3b54' })
       RestangularProvider.setRestangularFields({
-        id: '_id.$oid'
+        id: 'id'
       });
       
       RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
@@ -35,7 +36,7 @@ angular.module('car', ['restangular', 'ngRoute']).
 
 
 function ListCtrl($scope, Restangular) {
-   $scope.cars = Restangular.all("").getList().$object;
+   $scope.cars = Restangular.all("cars").getList().$object;
 }
 
 
@@ -63,7 +64,7 @@ function EditCtrl($scope, $location, Restangular, car) {
   };
 
   $scope.save = function() {
-    $scope.car.put().then(function() {
+    $scope.car.post().then(function() {
       $location.path('/');
     });
   };
