@@ -9,8 +9,8 @@ angular.module('car', ['restangular', 'ngRoute']).
         controller:EditCtrl, 
         templateUrl:'detail.html',
         resolve: {
-          project: function(Restangular, $route){
-            return Restangular.one('crs', $route.current.params.projectId).get();
+          car: function(Restangular, $route){
+            return Restangular.one('cars', $route.current.params.carId).get();
           }
         }
       }).
@@ -18,7 +18,7 @@ angular.module('car', ['restangular', 'ngRoute']).
       otherwise({redirectTo:'/'});
       
       RestangularProvider.setBaseUrl('/api/myapp/cars');
-      //RestangularProvider.setDefaultRequestParams({ apiKey: '4f847ad3e4b08a2eed5f3b54' })
+      RestangularProvider.setDefaultRequestParams({ apiKey: '4f847ad3e4b08a2eed5f3b54' })
       RestangularProvider.setRestangularFields({
         id: '_id.$oid'
       });
@@ -35,25 +35,25 @@ angular.module('car', ['restangular', 'ngRoute']).
 
 
 function ListCtrl($scope, Restangular) {
-   $scope.projects = Restangular.all("").getList().$object;
+   $scope.cars = Restangular.all("").getList().$object;
 }
 
 
 function CreateCtrl($scope, $location, Restangular) {
   $scope.save = function() {
-    Restangular.all('cars').post($scope.project).then(function(project) {
+    Restangular.all('cars').post($scope.car).then(function(car) {
       $location.path('/');
     });
   }
 }
 
-function EditCtrl($scope, $location, Restangular, project) {
-  var original = project;
-  $scope.project = Restangular.copy(original);
+function EditCtrl($scope, $location, Restangular, car) {
+  var original = car;
+  $scope.car = Restangular.copy(original);
   
 
   $scope.isClean = function() {
-    return angular.equals(original, $scope.project);
+    return angular.equals(original, $scope.car);
   }
 
   $scope.destroy = function() {
@@ -63,7 +63,7 @@ function EditCtrl($scope, $location, Restangular, project) {
   };
 
   $scope.save = function() {
-    $scope.project.put().then(function() {
+    $scope.car.put().then(function() {
       $location.path('/');
     });
   };
