@@ -113,7 +113,7 @@
             </div>
             <div class="form-group">
                 <label for="currency">Prefered currency</label>
-                <select id="currency" ng-model="choice" ng-options="car as car.name for car in cars"></select>
+                <select id="currency" ng-model="myAppStorage.currency" ng-options="currency as currency.id for currency in currencies track by currency.id"></select>
             </div>
             <div class="checkbox">
                 <label>Remember me
@@ -143,6 +143,7 @@
                     Austria<br
                     <abbr title="Phone">Phone: </abbr> +43 5 44210 100
                 </address>
+                <button ng-click="center_vie()" class="btn btn-primary">Show on map</button>
             </div>
             <div class="span4">
                 <address>
@@ -152,10 +153,11 @@
                     Austria<br
                     <abbr title="Phone">Phone: </abbr> +43 5 44210 200
                 </address>
+                <button ng-click="center_sp()" class="btn btn-primary">Show on map</button>
             </div>
             <div class="span4">
                 <address>
-                    <strong>Fan Cars Intergalactical</strong><br>
+                    <strong>Fun Cars Intergalactical Inc.</strong><br>
                     Twin Peaks Rd. 1<br>
                     Mars<br>
                     SOL-System<br>
@@ -163,32 +165,30 @@
                     Known Universe 1<br>
                     <abbr title="Phone">Phone: </abbr> +43 5 44210 200
                 </address>
+                
             </div>
             <div class="span12">
-                <button ng-click="nav()" class="btn btn-primary">Save</button>
-
-
-            <ui-gmap-google-map
-                    center='map.center'
-                    zoom='map.zoom'
-                    draggable="true"
-                    options="options">
-                <ui-gmap-marker
-                        coords="marker.coords"
-                        options="marker.options"
-                        idkey="marker.id">
-                </ui-gmap-marker>
-                <ui-gmap-marker
-                        coords="marker2.coords"
-                        options="marker2.options"
-                        idkey="marker2.id">
-                </ui-gmap-marker>
-            </ui-gmap-google-map>
+                <br>
+                <ui-gmap-google-map
+                        center='map.center'
+                        zoom='map.zoom'
+                        draggable="true"
+                        options="options">
+                    <ui-gmap-marker
+                            coords="marker_vie.coords"
+                            options="marker_vie.options"
+                            idkey="marker_vie.id">
+                    </ui-gmap-marker>
+                    <ui-gmap-marker
+                            coords="marker_sp.coords"
+                            options="marker_sp.options"
+                            idkey="marker_sp.id">
+                    </ui-gmap-marker>
+                </ui-gmap-google-map>
 
             </div>
         </div>
     </script>
-
     
     </div>
   </body>

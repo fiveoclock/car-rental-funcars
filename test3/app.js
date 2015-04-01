@@ -35,12 +35,13 @@ angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'uiGmapgoogle-map
         return elem;
       })
   });
-  
 
 
 function AppStorageCtrl($scope, $location, appStorage, Restangular) {
     appStorage('MyAppStorage', 'myAppStorage', $scope);
     $scope.cars = Restangular.all("cars").getList().$object;
+    
+    $scope.currencies = Restangular.all("currencies").getList().$object;
     
     $scope.close = function() {
       $location.path('/');
@@ -96,10 +97,7 @@ function EditCtrl($scope, $location, Restangular, car) {
 function ContactCtrl($scope, $location) {
     // for the map
     $scope.map = {
-        center: {
-            latitude: 47.81351,
-            longitude: 15.0
-        },
+        center: { latitude: 47.81351, longitude: 15.0 },
         draggable: true,
         zoom: 8
     };
@@ -110,24 +108,18 @@ function ContactCtrl($scope, $location) {
     };
 
     // map marker
-    $scope.marker = {
+    $scope.marker_vie = {
         id: 0,
-        coords: {
-            latitude:  48.2070736,
-            longitude: 16.37979340000004
-        },
+        coords: { latitude:  48.2070736, longitude: 16.37979340000004 },
         options: {
             draggable: false,
             title: 'Vienna',
             animation: 1 // 1: BOUNCE, 2: DROP
         }
     };
-    $scope.marker2 = {
+    $scope.marker_sp = {
         id: 1,
-        coords: {
-            latitude:  47.2278816,
-            longitude: 14.75984010000002
-        },
+        coords: { latitude:  47.2278816, longitude: 14.75984010000002 },
         options: {
             draggable: false,
             title: 'Spielberg',
@@ -135,12 +127,11 @@ function ContactCtrl($scope, $location) {
         }
     };
     
-    $scope.nav = function() {
-        $scope.map = {
-            center: {
-                latitude: 47.81351,
-                longitude: 15.0
-            }
-        }
-    }
+    $scope.center_vie = function() {
+        $scope.map = { center: { latitude:  48.2070736, longitude: 16.37979340000004}, zoom: 15 }
+    };
+    
+    $scope.center_sp = function() {
+        $scope.map = { center: { latitude:  47.2278816, longitude: 14.75984010000002}, zoom: 15 };
+    };
 }
