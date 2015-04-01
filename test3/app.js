@@ -16,6 +16,8 @@ angular.module('car', ['restangular', 'ngRoute', 'appStorage']).
         }
       }).
       when('/new', {controller:CreateCtrl, templateUrl:'detail.html'}).
+      when('/settings', {controller:AppStorageCtrl, templateUrl:'settings.html'}).
+      when('/contact', {controller:AppStorageCtrl, templateUrl:'contact.html'}).
       otherwise({redirectTo:'/'});
       
       RestangularProvider.setBaseUrl('/api/myapp/');
@@ -32,26 +34,29 @@ angular.module('car', ['restangular', 'ngRoute', 'appStorage']).
         }
         return elem;
       })
-      
-        var demo = angular.module('demo', [ 'appStorage' ]);
-
-
-
-
   });
   
 
 
-    function AppStorageCtrl($scope, appStorage) {
-      appStorage('MyAppStorage', 'myAppStorage', $scope);
-    }
+function AppStorageCtrl($scope, $location, appStorage, Restangular) {
+    appStorage('MyAppStorage', 'myAppStorage', $scope);
+    $scope.cars = Restangular.all("cars").getList().$object;
+    
+    $scope.close = function() {
+      $location.path('/');
+    };
+    
+    $scope.destroy = function() {
+    original.remove().then(function() {
+      $location.path('/');
+    });
+  };
+}
 
-    function AppStorageCtrl2($scope, appStorage) {
-      appStorage('MyAppStorage', 'myAppStorage', $scope);
-      $scope.myAppStorage.options = $scope.myAppStorage.options || [];
-    }
-  
-  
+function AppStorageCtrl2($scope, appStorage) {
+    appStorage('MyAppStorage', 'myAppStorage', $scope);
+    $scope.myAppStorage.options = $scope.myAppStorage.options || [];
+}  
   
 function ListCtrl($scope, Restangular) {
    $scope.cars = Restangular.all("cars").getList().$object;
@@ -82,7 +87,7 @@ function EditCtrl($scope, $location, Restangular, car) {
   };
 
   $scope.save = function() {
-    $scope.car.post().then(function() {
+    $scope.car.put().then(function() {
       $location.path('/');
     });
   };

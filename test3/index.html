@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 
 <html>
 
@@ -19,74 +20,141 @@
 
   <body>
     <div ng-app="car">
-    <h2>Web Cars</h2>
+
+    <div class="navbar navbar-static-top navbar-inverse">
+    <div class="navbar-inner">
+    <a class="brand" href="#">Web Cars</a>
+    <ul class="nav">
+    <li class="active"><a href="#">Home</a></li>
+    <li><a href="#/settings">Settings</a></li>
+    <li><a href="#/contact">Contact</a></li>
+    </ul>
+    </div>
+    </div>
+    
+    <br>
+    
     <div ng-view></div>
-   
+    
     <!-- CACHE FILE: list.html -->
     <script type="text/ng-template" id="list.html">
-      <input type="text" ng-model="search" class="search-query" placeholder="Search">
-      <table>
-        <thead>
-        <tr>
-          <th>No.</th>
-          <th>Car</th>
-          <th>Price</th>
-          <th><a href="#/new"><i class="icon-plus-sign"></i></a></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="car in cars | filter:search | orderBy:'id'" ng-show="car.id">
-          <td>{{car.id}}</td>
-          <td><a href="{{car.id}}" target="_blank">{{car.name}}</a></td>
-          <td>{{car.price}}</td>
-          <td>
-            <a href="#/book/{{car.id}}"><i class="icon-pencil"></i></a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+        <div class="container-fluid">
+            Search: <input type="text" ng-model="search" class="search-query" placeholder="Search">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                <th>Pos.</th>
+                <th>Car</th>
+                <th>Available cars</th>
+                <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="car in cars | filter:search | orderBy:'id'" ng-show="car.id">
+                <td>{{car.id}}</td>   
+                <td><a href="#/book/{{car.id}}"><i class="icon-road"></i> {{car.name}}</a></td>
+                <td>{{car.quantity}}</td>
+                <td>{{car.price}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </script>
   
       <!-- CACHE FILE: book.html  -->
     <script type="text/ng-template" id="book.html">
-      <h3>{{car.name}}</h3>
-      <form name="myForm">
-        <div class="control-group" ng-class="{error: myForm.name.$invalid}">
-          <input type="hidden" name="id" ng-model="car.id" required>
-          <label>Price: {{car.price}}</label>
-          <label>Only {{car.quantity}} on stock!</label>
-          <img ng-src="/img/{{car.id}}.jpg" width="50%">
-     
-          <label>Notes</label>
-          <textarea name="notes"></textarea>
-      
-        <br>
-        <a href="#/" class="btn">Cancel</a>
-        <button ng-click="save()" 
-                class="btn btn-primary">Book now</button>
-        <button ng-click="destroy()"
-                ng-show="car._id" class="btn btn-danger">Delete</button>
-      </form>
-
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span4">
+                    <h2>{{car.name}}</h2>
+                    <form name="myForm">
+                    <div class="control-group" ng-class="{error: myForm.name.$invalid}">
+                        <input type="hidden" name="id" ng-model="car.id" required>
+                        <label>Price: {{car.price}}</label>
+                        <label>Only {{car.quantity}} on stock!</label>
+                        
+                    
+                        <label>Notes</label>
+                        <textarea name="notes"></textarea>
+                    
+                        <br>
+                        <a href="#/" class="btn">Cancel</a>
+                        <button ng-click="save()" 
+                                class="btn btn-primary">Book now</button>
+                        <button ng-click="destroy()"
+                                ng-show="car._id" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="span8">
+                    <img ng-src="/img/{{car.id}}.jpg" >
+                </div>
+            </div>
+        </div>
     </script>
 
- 
-    <div ng-controller="AppStorageCtrl">
-      <p>Local Storage: {{myAppStorage}}</p>
-      <p>
-        Username: <input type="text" ng-model="myAppStorage.username"></input>
-      </p>
-      <p>
-        Remember me: <input type="checkbox"
-          ng-model="myAppStorage.rememberMe"></input>
-      </p>
-      
-    <p ng-repeat="i in [0,1,2,3]" >
-      {{i}}<input type="checkbox" ng-model="myAppStorage.options[i]"></input>
-    </p> 
-    </div>
+     <!-- CACHE FILE: settings.html  -->
+    <script type="text/ng-template" id="settings.html">
+        <div class="container-fluid">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" ng-model="myAppStorage.username"></input>
+            </div>
+            <div class="form-group">
+                <label for="currency">Prefered currency</label>
+                <select id="currency" ng-model="choice" ng-options="car as car.name for car in cars"></select>
+            </div>
+            <div class="checkbox">
+                <label>Remember me
+                    <input type="checkbox" ng-model="myAppStorage.rememberMe"></input>
+                </label>
+            </div>
+            <button ng-click="close()" class="btn btn-primary">Save</button>
+            
+            <br><br>
+            <p>
+                <a href="#/new"><i class="icon-road"></i></a> Local Storage: {{myAppStorage}}
+            </p>
+        </div>
+    </script>
 
-  </div>
+         <!-- CACHE FILE: contact.html  -->
+    <script type="text/ng-template" id="contact.html">
+        <h2>You can find us here</h2>
+        <div class="container-fluid">
+            <div class="span4">
+                <address>
+                    <strong>Fun Cars Internationlal GmbH (HQ)</strong><br>
+                    Park Ring 2<br>
+                    1010 Wien<br>
+                    Austria<br
+                    <abbr title="Phone">Phone: </abbr> +43 5 44210 100
+                </address>
+            </div>
+            <div class="span4">
+                <address>
+                    <strong>Fun Cars Internationlal GmbH</strong><br>
+                    Red Bull Ring Str. 1<br>
+                    8724 Spielberg<br>
+                    Austria<br
+                    <abbr title="Phone">Phone: </abbr> +43 5 44210 200
+                </address>
+            </div>
+            <div class="span4">
+                <address>
+                    <strong>Fan Cars Intergalactical</strong><br>
+                    Twin Peaks Rd. 1<br>
+                    Mars<br>
+                    SOL-System<br>
+                    Milky Way Galaxy<br>
+                    Known Universe 1<br>
+                    <abbr title="Phone">Phone: </abbr> +43 5 44210 200
+                </address>
+            </div>
+        </div>
+    </script>
+    
+    </div>
   </body>
 </html>
 
