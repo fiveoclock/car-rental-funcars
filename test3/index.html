@@ -50,6 +50,7 @@
     <!-- CACHE FILE: list.html -->
     <script type="text/ng-template" id="list.html">
         <div class="container-fluid">
+            <h3>Hi  {{myAppStorage.username}}, the following cars are waiting for you</h3>
             Search: <input type="text" ng-model="search" class="search-query" placeholder="Search">
             <table class="table table-bordered table-hover">
                 <thead>
@@ -57,7 +58,7 @@
                 <th>Pos.</th>
                 <th>Car</th>
                 <th>Available cars</th>
-                <th>Price</th>
+                <th>Price in {{myAppStorage.currency.id}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -81,7 +82,7 @@
                     <form name="myForm">
                     <div class="control-group" ng-class="{error: myForm.name.$invalid}">
                         <input type="hidden" name="id" ng-model="car.id" required>
-                        <label>Price: {{car.price}}</label>
+                        <label>Price: {{myAppStorage.currency.id}} {{car.price}}</label>
                         <label>Only {{car.quantity}} on stock!</label>
                         
                     

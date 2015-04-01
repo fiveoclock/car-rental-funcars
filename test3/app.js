@@ -59,12 +59,19 @@ function AppStorageCtrl2($scope, appStorage) {
     $scope.myAppStorage.options = $scope.myAppStorage.options || [];
 }  
   
-function ListCtrl($scope, Restangular) {
-   $scope.cars = Restangular.all("cars").getList().$object;
+function ListCtrl($scope, Restangular, appStorage) {
+    appStorage('MyAppStorage', 'myAppStorage', $scope);
+    console.log("selected currency: "+ $scope.myAppStorage.currency.id);
+    
+    // Normal GET function
+    //$scope.cars = Restangular.all("cars").getList().$object;
+    
+    // Using POST to get converted price
+    $scope.cars = Restangular.all('cars').post($scope.car, $scope.myAppStorage.currency.id,  {'Content-Type': 'text/plain'}).$object;
 }
 
 
-function CreateCtrl($scope, $location, Restangular) {
+function CreateCtrl($scope, $location, Restangular, appStorage) {
   $scope.save = function() {
     Restangular.all('cars').post($scope.car).then(function(car) {
       $location.path('/');
@@ -72,11 +79,11 @@ function CreateCtrl($scope, $location, Restangular) {
   }
 }
 
-function EditCtrl($scope, $location, Restangular, car) {
+function EditCtrl($scope, $location, Restangular, car, appStorage) {
+    appStorage('MyAppStorage', 'myAppStorage', $scope);
   var original = car;
   $scope.car = Restangular.copy(original);
   
-
   $scope.isClean = function() {
     return angular.equals(original, $scope.car);
   }
@@ -88,9 +95,13 @@ function EditCtrl($scope, $location, Restangular, car) {
   };
 
   $scope.save = function() {
-    $scope.car.put().then(function() {
-      $location.path('/');
-    });
+    var ret = $scope.car.put($scope.myAppStorage.username,  {'Content-Type': 'text/plain'}).then(function() {
+        console.log("Booking successful");
+        $location.path('/');
+    }, function() {
+        console.log("Booking unsuccessful");
+    } );
+    console.log(ret);
   };
 }
 
