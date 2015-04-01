@@ -20,7 +20,8 @@
     <script type="text/javascript" src="restangular.js"></script>
 
     <!-- maps -->
-    <script type="text/javascript" src="angular-google-maps.js"></script>
+    <script src="lodash.js"></script>
+    <script src="angular-google-maps.js"></script>
 
     <!-- localstorage lib -->
     <script src="appstorage.js"></script>
@@ -128,7 +129,9 @@
         </div>
     </script>
 
-         <!-- CACHE FILE: contact.html  -->
+
+    
+        <!-- CACHE FILE: contact.html  -->
     <script type="text/ng-template" id="contact.html">
         <h2>You can find us here</h2>
         <div class="container-fluid">
@@ -161,8 +164,31 @@
                     <abbr title="Phone">Phone: </abbr> +43 5 44210 200
                 </address>
             </div>
+            <div class="span12">
+                <button ng-click="nav()" class="btn btn-primary">Save</button>
+
+
+            <ui-gmap-google-map
+                    center='map.center'
+                    zoom='map.zoom'
+                    draggable="true"
+                    options="options">
+                <ui-gmap-marker
+                        coords="marker.coords"
+                        options="marker.options"
+                        idkey="marker.id">
+                </ui-gmap-marker>
+                <ui-gmap-marker
+                        coords="marker2.coords"
+                        options="marker2.options"
+                        idkey="marker2.id">
+                </ui-gmap-marker>
+            </ui-gmap-google-map>
+
+            </div>
         </div>
     </script>
+
     
     </div>
   </body>

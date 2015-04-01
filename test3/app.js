@@ -1,4 +1,4 @@
-angular.module('car', ['restangular', 'ngRoute', 'appStorage']).
+angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'uiGmapgoogle-maps']).
   config(function($routeProvider, RestangularProvider) {
     $routeProvider.
       when('/', {
@@ -17,7 +17,7 @@ angular.module('car', ['restangular', 'ngRoute', 'appStorage']).
       }).
       when('/new', {controller:CreateCtrl, templateUrl:'detail.html'}).
       when('/settings', {controller:AppStorageCtrl, templateUrl:'settings.html'}).
-      when('/contact', {controller:AppStorageCtrl, templateUrl:'contact.html'}).
+      when('/contact', {controller:ContactCtrl, templateUrl:'contact.html'}).
       otherwise({redirectTo:'/'});
       
       RestangularProvider.setBaseUrl('/api/myapp/');
@@ -93,3 +93,54 @@ function EditCtrl($scope, $location, Restangular, car) {
   };
 }
 
+function ContactCtrl($scope, $location) {
+    // for the map
+    $scope.map = {
+        center: {
+            latitude: 47.81351,
+            longitude: 15.0
+        },
+        draggable: true,
+        zoom: 8
+    };
+
+    // map options
+    $scope.options = {
+        scrollwheel: true
+    };
+
+    // map marker
+    $scope.marker = {
+        id: 0,
+        coords: {
+            latitude:  48.2070736,
+            longitude: 16.37979340000004
+        },
+        options: {
+            draggable: false,
+            title: 'Vienna',
+            animation: 1 // 1: BOUNCE, 2: DROP
+        }
+    };
+    $scope.marker2 = {
+        id: 1,
+        coords: {
+            latitude:  47.2278816,
+            longitude: 14.75984010000002
+        },
+        options: {
+            draggable: false,
+            title: 'Spielberg',
+            animation: 1 // 1: BOUNCE, 2: DROP
+        }
+    };
+    
+    $scope.nav = function() {
+        $scope.map = {
+            center: {
+                latitude: 47.81351,
+                longitude: 15.0
+            }
+        }
+    }
+}
