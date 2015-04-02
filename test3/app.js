@@ -93,6 +93,10 @@ function EditCtrl($scope, $location, Restangular, car, appStorage) {
       $location.path('/list');
     });
   };
+  
+  $scope.cancel = function() {
+      $location.path('/list');
+  };
 
   $scope.save = function() {
     var ret = $scope.car.put($scope.myAppStorage.username,  {'Content-Type': 'text/plain'}).then(function() {

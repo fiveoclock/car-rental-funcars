@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<html>
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Web Cars</title>
     <script>document.write('<base href="' + document.location + '" />');</script>
 
     <!-- css / own + bootstrap -->
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
     <!-- angular -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.js"></script>
@@ -32,111 +33,144 @@
   <body>
     <div ng-app="car">
 
-    <div class="navbar navbar-static-top navbar-inverse">
-    <div class="navbar-inner">
-    <a class="brand" href="#">Web Cars</a>
-    <ul class="nav">
-    <li class="active"><a href="#">Home</a></li>
-    <li><a href="#/settings">Settings</a></li>
-    <li><a href="#/contact">Contact</a></li>
-    </ul>
-    </div>
-    </div>
-    
-    <br>
-    
-    <div ng-view></div>
+    <nav class="navbar navbar-default navbar-static-top navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Web Cars</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#/">Home</a></li>
+                <li><a href="#/settings">Settings</a></li>
+                <li><a href="#/contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div ng-view class="container-fluid" id="content">
     
     <!-- CACHE FILE: list.html -->
     <script type="text/ng-template" id="list.html">
-        <div class="container-fluid">
             <h3>Hi  {{myAppStorage.username}}, the following cars are waiting for you</h3>
-            Search: <input type="text" ng-model="search" class="search-query" placeholder="Search">
-            <table class="table table-bordered table-hover">
+            <div class="form-inline">
+                <label for="search" class="col-sm-2 control-label">Search</label>
+                <div class="col-sm-10">
+                    <input id="search" type="text" ng-model="search" class="form-control" placeholder="Search">
+                </div>
+            </div>
+            <br>
+            <table class="table table-bordered">
                 <thead>
-                <tr>
-                <th>Pos.</th>
-                <th>Car</th>
-                <th>Available cars</th>
-                <th>Price in {{myAppStorage.currency.id}}</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Car</th>
+                        <th>Available cars</th>
+                        <th>Price in {{myAppStorage.currency.id}}</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="car in cars | filter:search | orderBy:'id'" ng-show="car.id">
-                <td>{{car.id}}</td>   
-                <td><a href="#/book/{{car.id}}"><i class="icon-road"></i> {{car.name}}</a></td>
-                <td>{{car.quantity}}</td>
-                <td>{{car.price}}</td>
-                </tr>
+                    <tr ng-repeat="car in cars | filter:search | orderBy:'id'" ng-show="car.id">
+                        <td>{{car.id}}</td>   
+                        <td><a href="#/book/{{car.id}}"><i class="icon-road"></i> {{car.name}}</a></td>
+                        <td>{{car.quantity}}</td>
+                        <td>{{car.price}}</td>
+                    </tr>
                 </tbody>
             </table>
-        </div>
     </script>
   
       <!-- CACHE FILE: book.html  -->
     <script type="text/ng-template" id="book.html">
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span4">
-                    <h2>{{car.name}}</h2>
-                    <form name="myForm">
-                    <div class="control-group" ng-class="{error: myForm.name.$invalid}">
-                        <input type="hidden" name="id" ng-model="car.id" required>
-                        <label>Price: {{myAppStorage.currency.id}} {{car.price}}</label>
-                        <label>Only {{car.quantity}} on stock!</label>
-                        
-                    
-                        <label>Notes</label>
-                        <textarea name="notes"></textarea>
-                    
-                        <br>
-                        <a href="#/" class="btn">Cancel</a>
-                        <button ng-click="save()" 
-                                class="btn btn-primary">Book now</button>
-                        <button ng-click="destroy()"
-                                ng-show="car._id" class="btn btn-danger">Delete</button>
-                        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>{{car.name}}</h2>
+            </div>
+            <div class="col-md-5">
+                <form class="form-horizontal" name="myForm">
+                    <input type="hidden" name="id" ng-model="car.id" required>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label>Price:</label>
+                        </div>
+                        <div class="col-sm-8">
+                            {{myAppStorage.currency.id}} {{car.price}}
+                        </div>
                     </div>
-                </div>
-                <div class="span8">
-                    <img ng-src="/img/{{car.id}}.jpg" >
-                </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label>Availability:</label>
+                        </div>
+                        <div class="col-sm-8">
+                            Only {{car.quantity}} on stock!
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label>Notes</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <textarea name="notes"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4"> </div>
+                        <div class="col-sm-8">
+                            <button ng-click="cancel()" class="btn btn-default">Cancel</button>
+                            <button ng-click="save()" class="btn btn-primary">Book now</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-7">
+                <img ng-src="/img/{{car.id}}.jpg" class="img-responsive">
             </div>
         </div>
     </script>
 
      <!-- CACHE FILE: settings.html  -->
     <script type="text/ng-template" id="settings.html">
-        <div class="container-fluid">
+        <form class="form-horizontal">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" ng-model="myAppStorage.username"></input>
+                <label for="username" class="col-sm-2 control-label">Username</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="username" ng-model="myAppStorage.username"></input>
+                </div>
             </div>
             <div class="form-group">
-                <label for="currency">Prefered currency</label>
-                <select id="currency" ng-model="myAppStorage.currency" ng-options="currency as currency.id for currency in currencies track by currency.id"></select>
+                <label for="currency" class="col-sm-2 control-label">Prefered currency</label>
+                <div class="col-sm-4">
+                    <select id="currency" class="form-control"  
+                        ng-model="myAppStorage.currency" ng-options="currency as currency.id for currency in currencies track by currency.id"></select>
+                </div>
             </div>
-            <div class="checkbox">
-                <label>Remember me
-                    <input type="checkbox" ng-model="myAppStorage.rememberMe"></input>
-                </label>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="myAppStorage.rememberMe"> Remember me
+                    </label>
+                </div>
+                </div>
             </div>
-            <button ng-click="close()" class="btn btn-primary">Save</button>
-            
-            <br><br>
-            <p>
-                <a href="#/new"><i class="icon-road"></i></a> Local Storage: {{myAppStorage}}
-            </p>
-        </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-click="close()" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="debug" class="col-sm-2 control-label"></label>
+                <div class="col-sm-4">
+                    <a href="#/new"><i class="icon-road"></i></a> Local Storage: {{myAppStorage}}
+                </div>
+            </div>
+        </form>
     </script>
 
 
-    
-        <!-- CACHE FILE: contact.html  -->
+    <!-- CACHE FILE: contact.html  -->
     <script type="text/ng-template" id="contact.html">
         <h2>You can find us here</h2>
-        <div class="container-fluid">
-            <div class="span4">
+        <div class="row">
+            <div class="col-md-4">
                 <address>
                     <strong>Fun Cars Internationlal GmbH (HQ)</strong><br>
                     Park Ring 2<br>
@@ -146,7 +180,7 @@
                 </address>
                 <button ng-click="center_vie()" class="btn btn-primary">Show on map</button>
             </div>
-            <div class="span4">
+            <div class="col-md-4">
                 <address>
                     <strong>Fun Cars Internationlal GmbH</strong><br>
                     Red Bull Ring Str. 1<br>
@@ -156,7 +190,7 @@
                 </address>
                 <button ng-click="center_sp()" class="btn btn-primary">Show on map</button>
             </div>
-            <div class="span4">
+            <div class="col-md-4">
                 <address>
                     <strong>Fun Cars Intergalactical Inc.</strong><br>
                     Twin Peaks Rd. 1<br>
@@ -168,7 +202,7 @@
                 </address>
                 
             </div>
-            <div class="span12">
+            <div class="col-md-12">
                 <br>
                 <ui-gmap-google-map
                         center='map.center'
@@ -186,7 +220,6 @@
                             idkey="marker_sp.id">
                     </ui-gmap-marker>
                 </ui-gmap-google-map>
-
             </div>
         </div>
     </script>
