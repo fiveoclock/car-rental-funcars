@@ -1,4 +1,4 @@
-angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'uiGmapgoogle-maps']).
+angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'ui.bootstrap', 'uiGmapgoogle-maps']).
   config(function($routeProvider, RestangularProvider) {
     $routeProvider.
       when('/', {
@@ -26,14 +26,6 @@ angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'uiGmapgoogle-map
         id: 'id'
       });
       
-      RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
-        
-        if (operation === 'put') {
-          elem._id = undefined;
-          return elem;
-        }
-        return elem;
-      })
   });
 
 
@@ -79,8 +71,8 @@ function CreateCtrl($scope, $location, Restangular, appStorage) {
   }
 }
 
-function EditCtrl($scope, $location, Restangular, car, appStorage) {
-    appStorage('MyAppStorage', 'myAppStorage', $scope);
+function EditCtrl($scope, $location, Restangular, car, appStorage, $modal) {
+  appStorage('MyAppStorage', 'myAppStorage', $scope);
   var original = car;
   $scope.car = Restangular.copy(original);
   
@@ -99,14 +91,33 @@ function EditCtrl($scope, $location, Restangular, car, appStorage) {
   };
 
   $scope.save = function() {
-    var ret = $scope.car.put($scope.myAppStorage.username,  {'Content-Type': 'text/plain'}).then(function() {
-        console.log("Booking successful");
+    var ret = $scope.car.put($scope.myAppStorage.username,  {'Content-Type': 'text/plain'}).then(function(response) {
+        console.log("Booking successful: " + response.msg);
         $location.path('/');
     }, function() {
         console.log("Booking unsuccessful");
     } );
-    console.log(ret);
   };
+  
+  $scope.open = function(size) {
+    var modalInstance = $modal.open({
+      templateUrl: 'modal.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+  
 }
 
 function ContactCtrl($scope, $location) {
@@ -150,3 +161,26 @@ function ContactCtrl($scope, $location) {
         $scope.map = { center: { latitude:  47.2278816, longitude: 14.75984010000002}, zoom: 15 };
     };
 }
+
+
+
+
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+function ModalInstanceCtrl($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+};
