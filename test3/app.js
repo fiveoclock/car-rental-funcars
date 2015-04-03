@@ -25,7 +25,6 @@ angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'ui.bootstrap', '
       RestangularProvider.setRestangularFields({
         id: 'id'
       });
-      
   });
 
 
@@ -46,11 +45,7 @@ function AppStorageCtrl($scope, $location, appStorage, Restangular) {
   };
 }
 
-function AppStorageCtrl2($scope, appStorage) {
-    appStorage('MyAppStorage', 'myAppStorage', $scope);
-    $scope.myAppStorage.options = $scope.myAppStorage.options || [];
-}  
-  
+
 function ListCtrl($scope, Restangular, appStorage) {
     appStorage('MyAppStorage', 'myAppStorage', $scope);
     console.log("selected currency: "+ $scope.myAppStorage.currency.id);
@@ -93,29 +88,46 @@ function EditCtrl($scope, $location, Restangular, car, appStorage, $modal) {
   $scope.save = function() {
     var ret = $scope.car.put($scope.myAppStorage.username,  {'Content-Type': 'text/plain'}).then(function(response) {
         console.log("Booking successful: " + response.msg);
+        
         $location.path('/');
+        $scope.message = response.msg;
+        
+        $scope.data = {
+            title : "Booking successful",
+            message : response.msg,
+            mode : 'info'
+        }
+        
+        $scope.showModal();
     }, function() {
         console.log("Booking unsuccessful");
+        
+        $scope.message = response.msg;
+        
+        $scope.data = {
+            title : "Booking unsuccessful",
+            message : "Please try again later. " + response.msg,
+            mode : 'info'
+        }
+        
+        $scope.showModal();
     } );
   };
   
-  $scope.open = function(size) {
+  
+  $scope.showModal = function(size) {
     var modalInstance = $modal.open({
       templateUrl: 'modal.html',
       controller: 'ModalInstanceCtrl',
       size: size,
       resolve: {
-        items: function () {
-          return $scope.items;
+        data: function () {
+          return $scope.data;
         }
       }
     });
 
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
+
   };
   
 }
@@ -169,18 +181,11 @@ function ContactCtrl($scope, $location) {
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-function ModalInstanceCtrl($scope, $modalInstance, items) {
-
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items[0]
-  };
-
+angular.module('car').controller('ModalInstanceCtrl', function ($scope, $modalInstance, data) {
+  $scope.data = data;
+ 
   $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
+      $modalInstance.dismiss('cancel');
   };
 
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-};
+});
