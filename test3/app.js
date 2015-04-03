@@ -1,5 +1,6 @@
-angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'ui.bootstrap', 'uiGmapgoogle-maps']).
-  config(function($routeProvider, RestangularProvider) {
+var app = angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'ui.bootstrap', 'uiGmapgoogle-maps']);
+
+app.config(function($routeProvider, RestangularProvider) {
     $routeProvider.
       when('/', {
         controller:ListCtrl, 
@@ -30,7 +31,6 @@ angular.module('car', ['restangular', 'ngRoute', 'appStorage', 'ui.bootstrap', '
 
 function AppStorageCtrl($scope, $location, appStorage, Restangular) {
     appStorage('MyAppStorage', 'myAppStorage', $scope);
-    $scope.cars = Restangular.all("cars").getList().$object;
     
     $scope.currencies = Restangular.all("currencies").getList().$object;
     
@@ -48,13 +48,17 @@ function AppStorageCtrl($scope, $location, appStorage, Restangular) {
 
 function ListCtrl($scope, Restangular, appStorage) {
     appStorage('MyAppStorage', 'myAppStorage', $scope);
-    console.log("selected currency: "+ $scope.myAppStorage.currency.id);
+    console.log("Selected currency: "+ $scope.myAppStorage.currency.id);
     
     // Normal GET function
     //$scope.cars = Restangular.all("cars").getList().$object;
     
     // Using POST to get converted price
-    $scope.cars = Restangular.all('cars').post($scope.car, $scope.myAppStorage.currency.id,  {'Content-Type': 'text/plain'}).$object;
+    //$scope.cars = Restangular.all('cars').post($scope.car, $scope.myAppStorage.currency.id,  {'Content-Type': 'text/plain'}).$object;
+    
+    // Sends a GET request like this: GET /api/cars?curr=$currency.id
+    $scope.cars = Restangular.all("cars").getList({curr: $scope.myAppStorage.currency.id}).$object;
+    
 }
 
 

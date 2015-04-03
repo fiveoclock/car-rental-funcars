@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Web Cars</title>
+    <title>Fun Cars</title>
     <script>document.write('<base href="' + document.location + '" />');</script>
 
     <!-- css / own + bootstrap -->
@@ -38,7 +38,7 @@
     <nav class="navbar navbar-default navbar-static-top navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#/">Web Cars</a>
+                <a class="navbar-brand" href="#/">Fun Cars</a>
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#/">Home</a></li>
@@ -53,13 +53,9 @@
     <!-- CACHE FILE: list.html -->
     <script type="text/ng-template" id="list.html">
             <h3>Hi  {{myAppStorage.username}}, the following cars are waiting for you</h3>
-            <div class="form-inline">
-                <label for="search" class="col-sm-2 control-label">Search</label>
-                <div class="col-sm-10">
-                    <input id="search" type="text" ng-model="search" class="form-control" placeholder="Search">
-                </div>
+            <div class="col-sm-2">
+                <input id="search" type="text" ng-model="search" class="form-control bottom-buffer" placeholder="Search">
             </div>
-            <br>
             <table class="table table-bordered">
                 <thead>
                     <tr>
