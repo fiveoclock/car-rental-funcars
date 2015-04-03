@@ -74,6 +74,7 @@ function EditCtrl($scope, $location, Restangular, car, appStorage, $modal) {
   appStorage('MyAppStorage', 'myAppStorage', $scope);
   var original = car;
   $scope.car = Restangular.copy(original);
+  //$scope.cars = Restangular.one("car").get({curr: $scope.myAppStorage.currency.id}).$object;
   
   $scope.isClean = function() {
     return angular.equals(original, $scope.car);
