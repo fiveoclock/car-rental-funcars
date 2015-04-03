@@ -7,7 +7,7 @@ app.config(function($routeProvider, RestangularProvider) {
         templateUrl:'list.html'
       }).
       when('/book/:carId', {
-        controller:EditCtrl, 
+        controller:BookCtrl,
         templateUrl:'book.html',
         resolve: {
           car: function(Restangular, $route){
@@ -58,7 +58,6 @@ function ListCtrl($scope, Restangular, appStorage) {
     
     // Sends a GET request like this: GET /api/cars?curr=$currency.id
     $scope.cars = Restangular.all("cars").getList({curr: $scope.myAppStorage.currency.id}).$object;
-    
 }
 
 
@@ -70,11 +69,15 @@ function CreateCtrl($scope, $location, Restangular, appStorage) {
   }
 }
 
-function EditCtrl($scope, $location, Restangular, car, appStorage, $modal) {
+function BookCtrl($scope, $location, Restangular, car, appStorage, $modal) {
   appStorage('MyAppStorage', 'myAppStorage', $scope);
-  var original = car;
-  $scope.car = Restangular.copy(original);
-  //$scope.cars = Restangular.one("car").get({curr: $scope.myAppStorage.currency.id}).$object;
+
+  // get the car 
+  //var original = car;
+  //$scope.car = Restangular.copy(original);
+
+  // get the car with the selected currency
+  $scope.car = Restangular.one("cars", car.id).get({curr: $scope.myAppStorage.currency.id}).$object;
   
   $scope.isClean = function() {
     return angular.equals(original, $scope.car);

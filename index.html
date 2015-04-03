@@ -49,7 +49,8 @@
     </nav>
 
     <div ng-view class="container-fluid" id="content">
-    
+
+
     <!-- CACHE FILE: list.html -->
     <script type="text/ng-template" id="list.html">
             <h3>Hi  {{myAppStorage.username}}, the following cars are waiting for you</h3>
@@ -75,7 +76,8 @@
                 </tbody>
             </table>
     </script>
-  
+
+
     <!-- CACHE FILE: book.html  -->
     <script type="text/ng-template" id="book.html">
         <div class="row">
@@ -124,7 +126,35 @@
         </div>
         <br>
     </script>
+
     
+    <!-- CACHE FILE: listBookings.html -->
+    <script type="text/ng-template" id="list.html">
+            <h3>Hi  {{myAppStorage.username}}, the following cars are waiting for you</h3>
+            <div class="col-sm-2">
+                <input id="search" type="text" ng-model="search" class="form-control bottom-buffer" placeholder="Search">
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Car</th>
+                        <th>Available cars</th>
+                        <th>Price in {{myAppStorage.currency.id}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="car in cars | filter:search | orderBy:'id'" ng-show="car.id">
+                        <td>{{car.id}}</td>   
+                        <td><a href="#/book/{{car.id}}"><i class="icon-road"></i> {{car.name}}</a></td>
+                        <td>{{car.quantity}}</td>
+                        <td>{{car.price}}</td>
+                    </tr>
+                </tbody>
+            </table>
+    </script>
+
+
     <!-- CACHE FILE: modal.html  -->
     <script type="text/ng-template" id="modal.html">
             <div class="modal-header">
@@ -138,8 +168,7 @@
             </div>
     </script>
 
-
-
+    
     <!-- CACHE FILE: settings.html  -->
     <script type="text/ng-template" id="settings.html">
         <form class="form-horizontal">
@@ -214,7 +243,6 @@
                     Known Universe 1<br>
                     <abbr title="Phone">Phone: </abbr> +43 5 44210 200
                 </address>
-                
             </div>
             <div class="col-md-12">
                 <br>
