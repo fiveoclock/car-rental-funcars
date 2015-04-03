@@ -42,6 +42,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#/">Home</a></li>
+                <li><a href="#/bookings">Bookings</a></li>
                 <li><a href="#/settings">Settings</a></li>
                 <li><a href="#/contact">Contact</a></li>
             </ul>
@@ -78,8 +79,8 @@
     </script>
 
 
-    <!-- CACHE FILE: book.html  -->
-    <script type="text/ng-template" id="book.html">
+    <!-- CACHE FILE: car.html  -->
+    <script type="text/ng-template" id="car.html">
         <div class="row">
             <div class="col-md-12">
                 <h2>{{car.name}}</h2>
@@ -128,27 +129,23 @@
     </script>
 
     
-    <!-- CACHE FILE: listBookings.html -->
-    <script type="text/ng-template" id="list.html">
-            <h3>Hi  {{myAppStorage.username}}, the following cars are waiting for you</h3>
-            <div class="col-sm-2">
-                <input id="search" type="text" ng-model="search" class="form-control bottom-buffer" placeholder="Search">
-            </div>
+    <!-- CACHE FILE: bookings.html -->
+    <script type="text/ng-template" id="bookings.html">
+            <h3>You have booked the following cars</h3>
+
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Car</th>
-                        <th>Available cars</th>
-                        <th>Price in {{myAppStorage.currency.id}}</th>
+                        <th>Car Name</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="car in cars | filter:search | orderBy:'id'" ng-show="car.id">
-                        <td>{{car.id}}</td>   
-                        <td><a href="#/book/{{car.id}}"><i class="icon-road"></i> {{car.name}}</a></td>
-                        <td>{{car.quantity}}</td>
-                        <td>{{car.price}}</td>
+                    <tr ng-repeat="booking in bookings" ng-show="booking.id">
+                        <td>{{booking.id}}</td>   
+                        <td>{{booking.carName}}</a></td>
+                        <td><button class="btn" ng-click="returnCar(booking.id)">Return</button></td>
                     </tr>
                 </tbody>
             </table>

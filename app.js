@@ -7,8 +7,8 @@ app.config(function($routeProvider, RestangularProvider) {
         templateUrl:'list.html'
       }).
       when('/book/:carId', {
-        controller:BookCtrl,
-        templateUrl:'book.html',
+        controller:CarCtrl,
+        templateUrl:'car.html',
         resolve: {
           car: function(Restangular, $route){
               console.log($route.current.params.carId);
@@ -19,6 +19,7 @@ app.config(function($routeProvider, RestangularProvider) {
       when('/new', {controller:CreateCtrl, templateUrl:'detail.html'}).
       when('/settings', {controller:AppStorageCtrl, templateUrl:'settings.html'}).
       when('/contact', {controller:ContactCtrl, templateUrl:'contact.html'}).
+      when('/bookings', {controller:BookingCtrl, templateUrl:'bookings.html'}).
       otherwise({redirectTo:'/'});
       
       RestangularProvider.setBaseUrl('/api/myapp/');
@@ -69,7 +70,7 @@ function CreateCtrl($scope, $location, Restangular, appStorage) {
   }
 }
 
-function BookCtrl($scope, $location, Restangular, car, appStorage, $modal) {
+function CarCtrl($scope, $location, Restangular, car, appStorage, $modal) {
   appStorage('MyAppStorage', 'myAppStorage', $scope);
 
   // get the car 
@@ -92,9 +93,17 @@ function BookCtrl($scope, $location, Restangular, car, appStorage, $modal) {
   $scope.cancel = function() {
       $location.path('/list');
   };
+  
+
+  
 
   $scope.save = function() {
-    var ret = $scope.car.put($scope.myAppStorage.username,  {'Content-Type': 'text/plain'}).then(function(response) {
+      //var ret = $scope.car.put($scope.myAppStorage.username,  {'Content-Type': 'text/plain'}).then(function(response) {
+      //$scope.cars = Restangular.one("cars").customPUT($scope.myAppStorage.username).then(function(response) {
+      
+      //$scope.cars = Restangular.all('cars').post($scope.car, $scope.myAppStorage.currency.id,  {'Content-Type': 'text/plain'}).$object;
+      //$scope.cars = Restangular.one("cars").one(car.id).customPUT($scope.myAppStorage.username).then(function(response) {
+      $scope.cars = Restangular.one("cars").post($scope.car.id, $scope.myAppStorage.username, null, {'Content-Type': 'text/plain'}).then(function(response) {      
         console.log("Booking successful: " + response.msg);
         
         $location.path('/');
@@ -120,8 +129,11 @@ function BookCtrl($scope, $location, Restangular, car, appStorage, $modal) {
         
         $scope.showModal();
     } );
-  };
+      
+      
+
   
+  };
   
   $scope.showModal = function(size) {
     var modalInstance = $modal.open({
@@ -134,11 +146,72 @@ function BookCtrl($scope, $location, Restangular, car, appStorage, $modal) {
         }
       }
     });
-
-
   };
-  
 }
+
+function BookingCtrl($scope, $location, Restangular, appStorage, $modal) {
+  appStorage('MyAppStorage', 'myAppStorage', $scope);
+
+  console.log("Username: "+ $scope.myAppStorage.username);
+
+  $scope.readBookings = function() {
+    // get the reservations
+    // works with both variants
+    //$scope.bookings = Restangular.all("reservations/" + $scope.myAppStorage.username).getList().$object;
+    $scope.bookings = Restangular.one("reservations").all($scope.myAppStorage.username).getList().$object;
+  }
+  
+  $scope.readBookings();
+  
+  $scope.returnCar = function(id) {
+      console.log("car: " + id);
+      //var ret = $scope.car.put($scope.myAppStorage.username,  {'Content-Type': 'text/plain'}).then(function(response) {
+      //$scope.cars = Restangular.one("cars").customPUT($scope.myAppStorage.username).then(function(response) {
+      
+      //$scope.cars = Restangular.all('cars').post($scope.car, $scope.myAppStorage.currency.id,  {'Content-Type': 'text/plain'}).$object;
+      //$scope.cars = Restangular.one("cars").one(car.id).customPUT($scope.myAppStorage.username).then(function(response) {
+      var response = Restangular.one("cars").one(id).customPUT($scope.myAppStorage.username, null, null, {'Content-Type': 'text/plain'}).then(function(response) {      
+        console.log("Booking successful: " + response.msg);
+
+        $scope.message = response.msg;
+        $scope.data = {
+            title : "Booking successful",
+            message : response.msg,
+            mode : 'info'
+        }
+        $scope.showModal();
+        
+        $scope.readBookings();
+    }, function() {
+        console.log("Booking unsuccessful");
+        
+        $scope.message = response.msg;
+        
+        $scope.data = {
+            title : "Booking unsuccessful",
+            message : "Please try again later. " + response.msg,
+            mode : 'info'
+        }
+        
+        $scope.showModal();
+    } );
+    
+  }
+  
+  $scope.showModal = function(size) {
+    var modalInstance = $modal.open({
+      templateUrl: 'modal.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        data: function () {
+          return $scope.data;
+        }
+      }
+    });
+  };
+}
+
 
 function ContactCtrl($scope, $location) {
     // for the map
