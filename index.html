@@ -32,9 +32,8 @@
     <script type="text/javascript" src="app.js"></script>
   </head>
 
-  <body>
-    <div ng-app="car">
-
+  <body ng-app="car">
+    
     <nav class="navbar navbar-default navbar-static-top navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -46,11 +45,15 @@
                 <li><a href="#/settings">Settings</a></li>
                 <li><a href="#/contact">Contact</a></li>
             </ul>
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">{{myAppStorage.username}}</a></li>
+            </ul>
+            
         </div>
     </nav>
 
     <div ng-view class="container-fluid" id="content">
-
 
     <!-- CACHE FILE: list.html -->
     <script type="text/ng-template" id="list.html">
@@ -261,9 +264,10 @@
                 </ui-gmap-google-map>
             </div>
         </div>
+        <br>
+        <br>
     </script>
     
-    </div>
     </div>
   </body>
 </html>
